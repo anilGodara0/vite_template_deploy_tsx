@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Smart Start (Install → Lint → Dev)",
+      "type": "shell",
+      "command": "sh",
+      "args": [
+        "-c",
+        "if [ ! -d node_modules ]; then echo 📦 Installing...; pnpm install; else echo ✅ node_modules present.; fi && echo 🔍 Running ESLint... && pnpm lint && echo 🚀 Starting Dev Server... && pnpm dev"
+      ],
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}
