@@ -12,16 +12,21 @@ import '../../App.css'
 import useSWR from 'swr'
 import { DataTable } from '../../libs/DataTable'
 import ValidatingButton from '../../Global/Swr/ValidatingButton'
+import { useState } from 'react'
 export default function Index() {
+  const [Page,setPage]=useState(1);
+  const url=`https://jsonplaceholder.typicode.com/posts?_page=${Page}&_limit=10`
 const fetcher = () =>{
-    return axios.get('https://fakestoreapi.com/products')
+    return axios.get(url)
 }
 
-const url='https://fakestoreapi.com/products'
 const { data, error, isLoading,isValidating,mutate }:any = useSWR(url, fetcher,  {keepPreviousData: true,
 })
 
 console.log({data,error,isLoading},"APi Response")
+const loadMore=()=>{
+setPage(prev=>prev+1)
+}
   
   return (
     <div>
@@ -29,6 +34,8 @@ console.log({data,error,isLoading},"APi Response")
         <ValidatingButton isValidating={isValidating} mutate={mutate} url={url}/>
         <DataTable
         defaultVisible={['title','price']}
+        loadMore={loadMore}
+        hasMore={Page>3?false:true}
         data={data?.data||[]}
         isLoading={isLoading||isValidating}
         columns={[{key:'title',label:'Name'},{key:'price',label:'Price'},{key:'phoneNumber',label:'Phone Number'},{key:'address',label:'Address'}]}
