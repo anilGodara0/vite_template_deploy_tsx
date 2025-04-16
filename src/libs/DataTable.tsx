@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { useInfiniteScroll } from './useInfiniteScroll';
 import { FaTableCells } from 'react-icons/fa6';
+import { GoSync } from 'react-icons/go';
 
 interface Column {
     label: string;
@@ -16,6 +17,7 @@ interface DataTableProps {
     onRowClick?: (row: any) => void;
     loadMore?: () => void;
     hasMore?: boolean;
+    isLoading?:boolean;
 }
 
 export const DataTable: React.FC<DataTableProps> = ({
@@ -25,6 +27,7 @@ export const DataTable: React.FC<DataTableProps> = ({
     onRowClick,
     loadMore,
     hasMore = false,
+    isLoading=false,
 }) => {
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
         defaultVisible.length ? defaultVisible : columns.map((col) => col.key)
@@ -155,6 +158,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                         )}
                     </tbody>
                 </table>
+                {isLoading&&!data?.length?<div className='text-center p-4'><p className='flex text-center'><GoSync className='animate-spin flex-end text-black'/><span className='ml-2 mt-[-3px]'> Loading data...</span> </p></div>:null}
             </div>
         </div>
     );

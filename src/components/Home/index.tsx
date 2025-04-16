@@ -6,21 +6,32 @@
  * @desc Home Page
  */
 
+import axios from 'axios'
+
 import '../../App.css'
+import useSWR from 'swr'
 import { DataTable } from '../../libs/DataTable'
+import ValidatingButton from '../../Global/Swr/ValidatingButton'
 export default function Index() {
-  const data=[
-    {name:'Anil',email:'anil@yopmail.com',phoneNumber:"+9187237123",address:'USA'},
-    {name:'Amit',email:'amit@yopmail.com',phoneNumber:"+912831823812831",address:'Here'},
-    {name:'Shivam',email:'shivam@yopmail.com',phoneNumber:'+9128712371273',address:'Test'}
-  ]
+const fetcher = () =>{
+    return axios.get('https://fakestoreapi.com/products')
+}
+
+const url='https://fakestoreapi.com/products'
+const { data, error, isLoading,isValidating,mutate }:any = useSWR(url, fetcher,  {keepPreviousData: true,
+})
+
+console.log({data,error,isLoading},"APi Response")
+  
   return (
     <div>
       <div className='wrapins'>
+        <ValidatingButton isValidating={isValidating} mutate={mutate} url={url}/>
         <DataTable
-        defaultVisible={['name','email']}
-        data={data}
-        columns={[{key:'name',label:'Name'},{key:'email',label:'Email'},{key:'phoneNumber',label:'Phone Number'},{key:'address',label:'Address'}]}
+        defaultVisible={['title','price']}
+        data={data?.data||[]}
+        isLoading={isLoading||isValidating}
+        columns={[{key:'title',label:'Name'},{key:'price',label:'Price'},{key:'phoneNumber',label:'Phone Number'},{key:'address',label:'Address'}]}
         key={'Hi'}
         />
         <section className="px-2 py-32 bg-white md:px-0">
